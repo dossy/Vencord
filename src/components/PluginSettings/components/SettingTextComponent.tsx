@@ -17,7 +17,7 @@
 */
 
 import { PluginOptionString } from "@utils/types";
-import { Forms, React, TextInput } from "@webpack/common";
+import { Forms, React, TextArea, TextInput } from "@webpack/common";
 
 import { ISettingElementProps } from ".";
 
@@ -29,7 +29,8 @@ export function SettingTextComponent({ option, pluginSettings, definedSettings, 
         onError(error !== null);
     }, [error]);
 
-    function handleChange(newValue) {
+    function handleChange(e) {
+        const newValue = e?.target ? e.target.value : e;
         const isValid = option.isValid?.call(definedSettings, newValue) ?? true;
         if (typeof isValid === "string") setError(isValid);
         else if (!isValid) setError("Invalid input provided.");
@@ -43,14 +44,23 @@ export function SettingTextComponent({ option, pluginSettings, definedSettings, 
     return (
         <Forms.FormSection>
             <Forms.FormTitle>{option.description}</Forms.FormTitle>
-            <TextInput
-                type="text"
-                value={state}
-                onChange={handleChange}
-                placeholder={option.placeholder ?? "Enter a value"}
-                disabled={option.disabled?.call(definedSettings) ?? false}
-                {...option.componentProps}
-            />
+            {option.componentProps?.multiline ?
+                <TextArea
+                    value={state}
+                    onChange={handleChange}
+                    placeholder={option.placeholder ?? "Enter a value"}
+                    disabled={option.disabled?.call(definedSettings) ?? false}
+                    {...option.componentProps}
+                /> :
+                <TextInput
+                    type="text"
+                    value={state}
+                    onChange={handleChange}
+                    placeholder={option.placeholder ?? "Enter a value"}
+                    disabled={option.disabled?.call(definedSettings) ?? false}
+                    {...option.componentProps}
+                />
+            }
             {error && <Forms.FormText style={{ color: "var(--text-danger)" }}>{error}</Forms.FormText>}
         </Forms.FormSection>
     );
