@@ -46,6 +46,35 @@ export function SettingTextComponent({ option, pluginSettings, definedSettings, 
             <Forms.FormTitle>{option.description}</Forms.FormTitle>
             {option.componentProps?.multiline ?
                 <TextArea
+                    style={{
+                        // textArea-2CLwUE:
+                        // background-color: "transparent",
+                        // resize: "none",
+                        border: "none",
+                        // @ts-expect-error
+                        "-webkit-appearance": "none",
+                        "-moz-appearance": "none",
+                        appearance: "none",
+                        "-webkit-box-sizing": "border-box",
+                        "box-sizing": "border-box",
+                        "font-weight": 400,
+                        "font-size": "1rem",
+                        "line-height": "1.375rem",
+                        width: "100%",
+                        // height: "44px",
+                        "min-height": "44px",
+                        color: "var(--text-normal)",
+                        // "padding-left": 0,
+                        // "padding-right": "10px",
+                        // fontSize16Padding-XoMpjI:
+                        "padding-bottom": "11px",
+                        "padding-top": "11px",
+                        // textAreaWithoutAttachmentButton-1as0NS:
+                        "padding-left": "16px",
+                        // additional styles:
+                        background: "var(--input-background)",
+                        resize: "vertical"
+                    }}
                     value={state}
                     onChange={handleChange}
                     placeholder={option.placeholder ?? "Enter a value"}
