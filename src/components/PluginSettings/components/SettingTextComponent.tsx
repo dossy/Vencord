@@ -17,7 +17,7 @@
 */
 
 import { PluginOptionString } from "@utils/types";
-import { Forms, React, TextInput } from "@webpack/common";
+import { Forms, React, TextArea, TextInput } from "@webpack/common";
 
 import { ISettingElementProps } from ".";
 
@@ -29,7 +29,8 @@ export function SettingTextComponent({ option, pluginSettings, definedSettings, 
         onError(error !== null);
     }, [error]);
 
-    function handleChange(newValue) {
+    function handleChange(e) {
+        const newValue = e?.target ? e.target.value : e;
         const isValid = option.isValid?.call(definedSettings, newValue) ?? true;
         if (typeof isValid === "string") setError(isValid);
         else if (!isValid) setError("Invalid input provided.");
@@ -42,14 +43,52 @@ export function SettingTextComponent({ option, pluginSettings, definedSettings, 
     return (
         <Forms.FormSection>
             <Forms.FormTitle>{option.description}</Forms.FormTitle>
-            <TextInput
-                type="text"
-                value={state}
-                onChange={handleChange}
-                placeholder={option.placeholder ?? "Enter a value"}
-                disabled={option.disabled?.call(definedSettings) ?? false}
-                {...option.componentProps}
-            />
+            {option.componentProps?.multiline ?
+                <TextArea
+                    style={{
+                        // textArea-2CLwUE:
+                        // background-color: "transparent",
+                        // resize: "none",
+                        border: "none",
+                        // @ts-expect-error
+                        "-webkit-appearance": "none",
+                        "-moz-appearance": "none",
+                        appearance: "none",
+                        "-webkit-box-sizing": "border-box",
+                        "box-sizing": "border-box",
+                        "font-weight": 400,
+                        "font-size": "1rem",
+                        "line-height": "1.375rem",
+                        width: "100%",
+                        // height: "44px",
+                        "min-height": "44px",
+                        color: "var(--text-normal)",
+                        // "padding-left": 0,
+                        // "padding-right": "10px",
+                        // fontSize16Padding-XoMpjI:
+                        "padding-bottom": "11px",
+                        "padding-top": "11px",
+                        // textAreaWithoutAttachmentButton-1as0NS:
+                        "padding-left": "16px",
+                        // additional styles:
+                        background: "var(--input-background)",
+                        resize: "vertical"
+                    }}
+                    value={state}
+                    onChange={handleChange}
+                    placeholder={option.placeholder ?? "Enter a value"}
+                    disabled={option.disabled?.call(definedSettings) ?? false}
+                    {...option.componentProps}
+                /> :
+                <TextInput
+                    type="text"
+                    value={state}
+                    onChange={handleChange}
+                    placeholder={option.placeholder ?? "Enter a value"}
+                    disabled={option.disabled?.call(definedSettings) ?? false}
+                    {...option.componentProps}
+                />
+            }
             {error && <Forms.FormText style={{ color: "var(--text-danger)" }}>{error}</Forms.FormText>}
         </Forms.FormSection>
     );
